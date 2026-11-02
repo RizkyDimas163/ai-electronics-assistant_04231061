@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Electronics Assistant</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <aside id="sidebar" aria-label="Navigasi">
+    <div class="brand"><span class="logo" id="logo"></span><div><b>AI Electronics</b><span>Assistant</span></div>
+      <button class="icon-btn only-mobile" id="closeSide" aria-label="Tutup menu">✕</button></div>
+    <button class="btn primary block" id="newChat">＋ Chat Baru</button>
+    <div class="side-label">Riwayat</div>
+    <div id="history" class="history"></div>
+    <nav class="menu">
+      <button data-view="docs">Dokumen Referensi</button>
+      <button data-view="params">Pencarian Parameter</button>
+      <button data-view="compare">Perbandingan Komponen</button>
+      <button data-view="settings">Pengaturan</button>
+    </nav>
+    <div class="status" id="status"><i class="dot"></i><span>Memeriksa koneksi…</span></div>
+  </aside>
+  <div id="overlay"></div>
+
+  <main>
+    <header class="topbar">
+      <button class="icon-btn only-mobile" id="openSide" aria-label="Buka menu">☰</button>
+      <h1 id="viewTitle">Chat</h1>
+      <button class="btn ghost small" id="backChat" hidden>← Kembali ke chat</button>
+    </header>
+
+    <section id="view-chat" class="view active">
+      <div id="messages" class="messages" aria-live="polite">
+        <div id="welcome" class="welcome">
+          <div class="logo big" id="logo2"></div>
+          <p class="greet">Halo! Saya AI Electronics Assistant. Saya siap membantu Anda memahami datasheet, mencari parameter teknis, dan membandingkan komponen elektronika berdasarkan dokumen referensi yang tersedia.</p>
+          <div class="cards">
+            <button class="card" data-q="Cari parameter tegangan keluaran LM317.">Cari parameter tegangan keluaran LM317.</button>
+            <button class="card" data-q="Jelaskan fungsi dan karakteristik LM7805.">Jelaskan fungsi dan karakteristik LM7805.</button>
+            <button class="card" data-q="Bandingkan LM1117 dengan LM2596.">Bandingkan LM1117 dengan LM2596.</button>
+            <button class="card" data-q="Cari informasi parameter tertentu dari dokumen datasheet.">Cari informasi parameter tertentu dari dokumen datasheet.</button>
+          </div>
+        </div>
+      </div>
+      <div class="composer-wrap">
+        <div id="inputError" class="input-error" role="alert" hidden></div>
+        <div class="composer">
+          <textarea id="input" rows="1" maxlength="1000" placeholder="Tanyakan tentang datasheet… (Enter kirim, Shift+Enter baris baru)" aria-label="Pesan"></textarea>
+          <button class="icon-btn" id="clearInput" title="Hapus input" aria-label="Hapus input">⌫</button>
+          <button class="send" id="send" title="Kirim" aria-label="Kirim pesan">➤</button>
+        </div>
+        <div class="hint" id="hint">Jawaban bersumber dari dokumen referensi. Periksa angka kritis ke datasheet asli sebelum merakit.</div>
+      </div>
+    </section>
+
+    <section id="view-docs" class="view">
+      <div class="toolbar"><input id="docSearch" type="search" placeholder="Cari nama dokumen atau komponen…" aria-label="Cari dokumen">
+        <label class="btn primary">Unggah dokumen<input type="file" id="upload" accept=".pdf,.csv,.txt" hidden></label></div>
+      <p class="muted">Format: PDF, CSV, TXT (maks. 20 MB). Status “Berhasil” hanya muncul setelah teks benar-benar diekstrak dan diindeks. Dokumen unggahan hanya dipakai untuk kutipan; angka parameter tetap dari tabel terstruktur.</p>
+      <div class="table-scroll"><table class="tbl" id="docTable"><thead><tr><th>Nama dokumen</th><th>Jenis</th><th>Komponen terkait</th><th>Ukuran</th><th>Status</th><th>Aksi</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <section id="view-params" class="view">
+      <div class="toolbar wrap">
+        <input id="pText" type="search" placeholder="Cari bebas (parameter, kondisi, simbol)…" aria-label="Cari bebas">
+        <select id="pComp" aria-label="Komponen"><option value="">Semua komponen</option></select>
+        <input id="pParam" type="search" placeholder="Nama parameter (mis. dropout)" aria-label="Nama parameter">
+        <input id="pVal" type="search" placeholder="Nilai (mis. 5 atau 1.2-1.3)" aria-label="Nilai atau rentang">
+        <select id="pUnit" aria-label="Satuan"><option value="">Semua satuan</option></select>
+        <select id="pDoc" aria-label="Dokumen sumber"><option value="">Semua dokumen</option></select>
+      </div>
+      <p class="muted" id="pInfo"></p>
+      <div class="table-scroll"><table class="tbl" id="pTable"><thead></thead><tbody></tbody></table></div>
+    </section>
+
+    <section id="view-compare" class="view">
+      <p class="muted">Pilih dua atau lebih komponen. Parameter yang tidak ada di datasheet ditampilkan sebagai “Tidak tersedia dalam dokumen”.</p>
+      <div id="chips" class="chips"></div>
+      <button class="btn primary" id="runCompare">Bandingkan</button>
+      <div id="cmpOut"></div>
+    </section>
+
+    <section id="view-settings" class="view">
+      <div class="panel"><h3>Koneksi AI</h3><p id="setStatus" class="muted"></p>
+        <p class="muted">Kunci API hanya dibaca backend dari file <code>.env</code>; frontend tidak pernah menyimpan kredensial.</p></div>
+      <div class="panel"><h3>Tampilan</h3>
+        <label class="check"><input type="checkbox" id="setSources"> Tampilkan sumber jawaban secara otomatis</label>
+        <label class="check"><input type="checkbox" id="setMotion"> Kurangi animasi</label></div>
+      <div class="panel"><h3>Data lokal</h3><p class="muted">Riwayat percakapan disimpan di localStorage peramban ini (tanpa kredensial).</p>
+        <button class="btn danger" id="clearAll">Hapus semua riwayat</button></div>
+    </section>
+  </main>
+</div>
+<div id="toasts" aria-live="polite"></div>
+<div id="modal" class="modal" hidden><div class="modal-box" role="dialog" aria-modal="true">
+  <h3 id="mTitle"></h3><p id="mText"></p><input id="mInput" hidden maxlength="80">
+  <div class="modal-actions"><button class="btn ghost" id="mCancel">Batal</button><button class="btn primary" id="mOk">OK</button></div></div></div>
+<script src="script.js"></script>
+</body>
+</html>

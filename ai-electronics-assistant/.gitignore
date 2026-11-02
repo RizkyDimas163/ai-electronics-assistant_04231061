@@ -1,0 +1,6 @@
+.env
+data/uploads/*
+!data/uploads/.gitkeep
+data/index_cache.json
+data/documents/*.pdf
+__pycache__/

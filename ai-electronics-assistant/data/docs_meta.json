@@ -1,0 +1,8 @@
+[
+{"file":"LM340-LM7805.pdf","nama":"LM340, LM340A, LM7805, LM7812, LM7815 (SNOSBT0L, rev. Sep 2016)","jenis":"Datasheet","komponen":"LM7805, LM7812"},
+{"file":"LM317.pdf","nama":"LM317 3-Pin Adjustable Regulator (SLVS044Z, rev. Apr 2025)","jenis":"Datasheet","komponen":"LM317"},
+{"file":"LM1117.pdf","nama":"LM1117 800-mA Low-Dropout Linear Regulator (SNOS412Q, rev. Jan 2023)","jenis":"Datasheet","komponen":"LM1117-3.3, LM1117-5.0"},
+{"file":"LM2596.pdf","nama":"LM2596 SIMPLE SWITCHER 3-A Step-Down (SNVS124G, rev. Mar 2023)","jenis":"Datasheet","komponen":"LM2596-5.0"},
+{"file":"SPRA953D.pdf","nama":"Semiconductor and IC Package Thermal Metrics (SPRA953D, rev. Mar 2024)","jenis":"Application report","komponen":"Rujukan termal"},
+{"file":"SBVA025.pdf","nama":"Using New Thermal Metrics (SBVA025, Des 2009)","jenis":"Application report","komponen":"Rujukan termal"}
+]
